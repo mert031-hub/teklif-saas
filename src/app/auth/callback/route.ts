@@ -1,0 +1,36 @@
+import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export async function GET(request: NextRequest) {
+  const { searchParams, origin } = new URL(request.url);
+  const code = searchParams.get("code");
+
+  if (code) {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (!error) {
+      // Check if profile + agency exist → onboarding or dashboard
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("agency_id")
+          .eq("id", user.id)
+          .single();
+
+        if (!profile?.agency_id) {
+          return NextResponse.redirect(`${origin}/onboarding`);
+        }
+      }
+
+      return NextResponse.redirect(`${origin}/dashboard`);
+    }
+  }
+
+  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
+}

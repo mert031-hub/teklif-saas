@@ -1,0 +1,385 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap");
+
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+   All values use clamp() for fluid scaling.
+   No hardcoded px at single breakpoint.
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  /* ── Breakpoint reference (CSS only, not used in JS) ──
+     sm:  640px
+     md:  768px
+     lg:  1024px
+     xl:  1280px                                        */
+
+  /* ── Color palette ── */
+  --sand: #f5f0e8;
+  --sand-deep: #ede5d8;
+  --ivory: #faf8f4;
+  --dune: #ddd5c4;
+  --dune-light: #eae3d6;
+  --ocean: #1b4f72;
+  --ocean-mid: #2e86c1;
+  --ocean-light: #5ba4cf;
+  --ocean-pale: #d6eaf8;
+  --gold: #c9a96e;
+  --gold-light: #dec48f;
+  --gold-pale: #f4ecd9;
+  --terra: #7d4e2d;
+  --sage: #6b8f71;
+  --ink: #1a1a2e;
+  --ink-soft: #2c3e50;
+  --muted: #6b7280;
+  --dim: #9ca3af;
+  --bg: var(--ivory);
+  --bg-section: var(--sand);
+  --bg-card: #ffffff;
+  --border: rgba(26, 26, 46, 0.1);
+  --border-soft: rgba(26, 26, 46, 0.06);
+
+  /* ── Typography ── */
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "DM Mono", monospace;
+
+  /* ── Fluid type scale ──
+     Formula: clamp(MIN, PREFERRED_VW, MAX)
+     MIN  = mobile minimum
+     VW   = scales with viewport
+     MAX  = desktop cap                                 */
+  --t-hero: clamp(2.8rem, 8vw, 7.5rem); /* Hero headline     */
+  --t-display: clamp(2.2rem, 5.5vw, 5rem); /* Section titles    */
+  --t-title: clamp(1.6rem, 3.5vw, 3rem); /* Card/modal titles */
+  --t-subtitle: clamp(1.2rem, 2.5vw, 2rem); /* Subtitles         */
+  --t-body: clamp(0.9rem, 1.5vw, 1rem); /* Body text         */
+  --t-small: clamp(0.78rem, 1.2vw, 0.88rem); /* Secondary text    */
+  --t-label: clamp(0.65rem, 1vw, 0.72rem); /* Labels/badges     */
+
+  /* ── Fluid spacing scale ── */
+  --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+  --space-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --space-md: clamp(0.75rem, 1.5vw, 1.25rem);
+  --space-lg: clamp(1rem, 2vw, 1.75rem);
+  --space-xl: clamp(1.5rem, 3vw, 2.5rem);
+  --space-2xl: clamp(2rem, 5vw, 4rem);
+  --space-3xl: clamp(3rem, 8vw, 7rem);
+  --space-section: clamp(4rem, 10vw, 9rem);
+
+  /* ── Fluid container widths ── */
+  --container: min(1280px, 100% - 3rem);
+  --container-sm: min(860px, 100% - 2rem);
+  --container-xs: min(520px, 100% - 2rem);
+
+  /* ── Fluid border radius ── */
+  --radius-sm: clamp(6px, 1vw, 8px);
+  --radius-md: clamp(8px, 1.5vw, 12px);
+  --radius-lg: clamp(12px, 2vw, 20px);
+  --radius-xl: clamp(16px, 3vw, 28px);
+
+  /* ── Animation ── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --duration-cinematic: 900ms;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET
+   ═══════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent iOS text size adjustment */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  /* Prevent horizontal scroll on all devices */
+  max-width: 100vw;
+}
+
+/* ═══════════════════════════════════════════════════
+   FLUID CONTAINERS
+   ═══════════════════════════════════════════════════ */
+
+.container {
+  width: var(--container);
+  margin-inline: auto;
+}
+
+.container-sm {
+  width: var(--container-sm);
+  margin-inline: auto;
+}
+
+.container-xs {
+  width: var(--container-xs);
+  margin-inline: auto;
+}
+
+/* ═══════════════════════════════════════════════════
+   FLUID TYPOGRAPHY CLASSES
+   ═══════════════════════════════════════════════════ */
+
+.t-hero {
+  font-family: var(--font-display);
+  font-size: var(--t-hero);
+  font-weight: 300;
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+}
+
+.t-display {
+  font-family: var(--font-display);
+  font-size: var(--t-display);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.t-title {
+  font-family: var(--font-display);
+  font-size: var(--t-title);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.t-subtitle {
+  font-family: var(--font-display);
+  font-size: var(--t-subtitle);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.t-body {
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: 1.7;
+}
+
+.t-small {
+  font-family: var(--font-body);
+  font-size: var(--t-small);
+  line-height: 1.65;
+}
+
+.t-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION SPACING
+   ═══════════════════════════════════════════════════ */
+
+.section {
+  padding-block: var(--space-section);
+}
+
+.section-sm {
+  padding-block: var(--space-3xl);
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE LAYOUT HELPERS
+   ═══════════════════════════════════════════════════ */
+
+/* Split layout — stacks on mobile */
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+}
+
+@media (min-width: 768px) {
+  .split-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3xl);
+  }
+}
+
+@media (min-width: 1024px) {
+  .split-layout-55-45 {
+    grid-template-columns: 55% 45%;
+  }
+  .split-layout-45-55 {
+    grid-template-columns: 45% 55%;
+  }
+}
+
+/* Auth split — full height panels */
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100svh; /* svh = small viewport height, safe on mobile */
+}
+
+@media (min-width: 768px) {
+  .auth-layout {
+    grid-template-columns: 45% 55%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .auth-layout {
+    grid-template-columns: 55% 45%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+::-webkit-scrollbar-track {
+  background: var(--sand);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-light);
+}
+
+::selection {
+  background: var(--ocean-pale);
+  color: var(--ocean);
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITIES
+   ═══════════════════════════════════════════════════ */
+
+.hairline {
+  height: 1px;
+  background: var(--border);
+}
+.gold-line {
+  display: inline-block;
+  width: 48px;
+  height: 1px;
+  background: var(--gold);
+}
+.gradient-text {
+  background: linear-gradient(135deg, var(--ocean) 0%, var(--ocean-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hover-underline {
+  position: relative;
+  text-decoration: none;
+}
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--ocean);
+  transition: width var(--duration-base) var(--ease-in-out);
+}
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════
+   ANIMATIONS — REDUCED MOTION AWARE
+   ═══════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Keep layout transitions but kill decorative ones */
+  .motion-safe-only {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   TOUCH & MOBILE OPTIMIZATIONS
+   ═══════════════════════════════════════════════════ */
+
+/* Minimum tap target size */
+button,
+a,
+[role="button"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Exception: inline links & icon-only buttons */
+a.inline-link,
+button.icon-btn {
+  min-height: unset;
+  min-width: unset;
+}
+
+/* Prevent double-tap zoom on buttons */
+button {
+  touch-action: manipulation;
+}
+
+/* iOS momentum scrolling */
+.scroll-smooth {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* ═══════════════════════════════════════════════════
+   OVERFLOW SAFETY
+   ═══════════════════════════════════════════════════ */
+
+img,
+video,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Prevent long strings from breaking layout */
+.overflow-wrap {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}

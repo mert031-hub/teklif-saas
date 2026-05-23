@@ -1,0 +1,205 @@
+# PROJECT_EXECUTION_RULES.md
+
+IMPORTANT:
+These rules exist to REDUCE token usage, preserve architectural consistency, and maintain development focus throughout the project.
+
+Follow all rules below during development.
+
+--------------------------------------------------
+CORE DEVELOPMENT PRINCIPLES
+--------------------------------------------------
+
+- Respect the existing project architecture.
+- Do NOT unnecessarily rewrite stable systems.
+- Do NOT regenerate full files unless explicitly required.
+- Keep modifications localized and modular.
+- Prioritize production-quality structure.
+- Maintain consistency across all sections and components.
+- Preserve existing folder hierarchy unless restructuring is truly necessary.
+
+--------------------------------------------------
+TOKEN OPTIMIZATION RULES
+--------------------------------------------------
+
+IMPORTANT:
+Minimize unnecessary reasoning and avoid excessive architectural explanations unless explicitly requested.
+
+DO:
+- Return concise implementation-focused outputs.
+- Modify only necessary sections.
+- Return minimal diffs whenever possible.
+- Reuse existing systems/components/styles.
+- Reuse existing animation infrastructure.
+- Continue from existing context instead of recreating systems.
+
+DO NOT:
+- Re-explain already established design philosophy.
+- Repeat large code blocks unnecessarily.
+- Regenerate entire files for small edits.
+- Rebuild working systems from scratch.
+- Perform unnecessary deep architectural analysis repeatedly.
+
+Preferred output style:
+- focused
+- direct
+- implementation-oriented
+- minimal but production-ready
+
+--------------------------------------------------
+DESIGN SYSTEM CONSISTENCY
+--------------------------------------------------
+
+Always follow the established visual system.
+
+Maintain consistency with:
+- typography hierarchy
+- spacing rhythm
+- animation philosophy
+- color palette
+- luxury tourism aesthetic
+- cinematic interaction style
+- responsive behavior
+- component spacing logic
+- premium visual polish
+
+Avoid introducing:
+- random visual styles
+- inconsistent spacing
+- conflicting animations
+- corporate SaaS aesthetics
+- template-like sections
+- generic UI patterns
+
+--------------------------------------------------
+ANIMATION SYSTEM RULES
+--------------------------------------------------
+
+Animations are important but should remain modular and performant.
+
+Use:
+- smooth motion
+- elegant transitions
+- cinematic reveals
+- subtle parallax
+- staggered animations
+- premium hover interactions
+
+Avoid:
+- excessive animation complexity
+- unnecessary motion layers
+- performance-heavy implementations
+- animation duplication
+- random motion behavior
+
+Whenever possible:
+- extend existing animation utilities
+- reuse animation patterns
+- centralize motion logic
+
+--------------------------------------------------
+COMPONENT DEVELOPMENT RULES
+--------------------------------------------------
+
+Build components to be:
+- reusable
+- scalable
+- modular
+- maintainable
+- animation-friendly
+- responsive
+
+Prefer:
+- isolated sections
+- reusable UI primitives
+- shared layout systems
+- shared motion patterns
+
+Avoid:
+- giant monolithic components
+- duplicated UI logic
+- duplicated animation logic
+- deeply nested complexity
+
+--------------------------------------------------
+IMPLEMENTATION STRATEGY
+--------------------------------------------------
+
+Development should happen incrementally.
+
+Preferred workflow:
+1. Foundation
+2. Layout structure
+3. Typography hierarchy
+4. Section composition
+5. Motion enhancement
+6. Final polish
+
+When improving a section:
+- preserve existing architecture
+- only touch required files
+- avoid unrelated edits
+
+--------------------------------------------------
+OUTPUT RULES
+--------------------------------------------------
+
+Unless explicitly requested otherwise:
+
+- Return only changed sections.
+- Avoid unnecessary explanations.
+- Avoid repeating existing code.
+- Keep responses compact.
+- Focus on implementation quality.
+- Prioritize maintainable code.
+
+If a file only needs small modifications:
+DO NOT regenerate the entire file.
+
+--------------------------------------------------
+PROJECT VISUAL DIRECTION
+--------------------------------------------------
+
+The project represents a premium tourism/travel experience.
+
+The interface should feel:
+- luxurious
+- immersive
+- elegant
+- cinematic
+- emotionally engaging
+- modern
+- spacious
+- high-end
+
+Visual direction references:
+- award-winning websites
+- premium hospitality brands
+- cinematic landing pages
+- modern luxury travel experiences
+
+Maintain:
+- bright layouts
+- airy spacing
+- premium typography
+- soft luxury colors
+- tourism-oriented visual identity
+
+--------------------------------------------------
+FINAL PRIORITIES
+--------------------------------------------------
+
+Priority order:
+
+1. Architectural consistency
+2. Premium UI quality
+3. Smooth responsive experience
+4. Reusable scalable systems
+5. Animation polish
+6. Token efficiency
+
+Always optimize for:
+- maintainability
+- scalability
+- visual polish
+- minimal unnecessary output
+- efficient iteration workflow
