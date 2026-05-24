@@ -1,46 +1,49 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
 const plans = [
   {
     name: "Başlangıç",
+    nameEn: "STARTER",
     price: { monthly: 490, yearly: 390 },
     description: "Bireysel acenteler ve yeni başlayanlar için.",
     features: [
       "20 aktif teklif",
-      "Temel bloklar (Hero, Fiyat, Galeri)",
-      "Teklif görüntüleme analizi",
+      "Temel bloklar",
+      "Görüntüleme analizi",
       "WhatsApp & link paylaşım",
       "PDF export",
-      "5 GB medya depolama",
+      "5 GB medya",
       "E-posta desteği",
     ],
     cta: "Ücretsiz Başla",
+    href: "/register",
     popular: false,
-    accent: "var(--ink-soft)",
   },
   {
     name: "Profesyonel",
+    nameEn: "PRO",
     price: { monthly: 990, yearly: 790 },
     description: "Büyüyen acenteler ve aktif satış ekipleri için.",
     features: [
-      "Sınırsız aktif teklif",
-      "Tüm bloklar + Video entegrasyonu",
+      "Sınırsız teklif",
+      "Tüm bloklar + Video",
       "Gelişmiş analitik & ısı haritası",
       "Özel marka rengi & logo",
-      "Ekip üyeleri (3 kişi)",
-      "50 GB medya depolama",
+      "Ekip üyeleri (3)",
+      "50 GB medya",
       "Öncelikli destek & API",
     ],
     cta: "14 Gün Ücretsiz Dene",
+    href: "/register",
     popular: true,
-    accent: "var(--ocean)",
   },
   {
     name: "Kurumsal",
+    nameEn: "ENTERPRISE",
     price: { monthly: 2490, yearly: 1990 },
     description: "Çok şubeli zincirler ve tur operatörleri için.",
     features: [
@@ -49,12 +52,12 @@ const plans = [
       "Özel domain",
       "White-label",
       "Dedicated account manager",
-      "500 GB medya depolama",
+      "500 GB medya",
       "SLA + özel entegrasyonlar",
     ],
     cta: "Satış Ekibiyle Görüş",
+    href: "/contact",
     popular: false,
-    accent: "var(--gold)",
   },
 ];
 
@@ -74,18 +77,20 @@ function PlanCard({
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
-        duration: 0.7,
+        duration: 0.6,
         delay: index * 0.1,
         ease: [0.16, 1, 0.3, 1],
       }}
+      /* card-hover for lift effect — CSS only */
+      className={plan.popular ? "" : "card-hover"}
       style={{
         background: plan.popular ? "var(--ocean)" : "var(--bg-card)",
         border: plan.popular ? "none" : "1px solid var(--border)",
-        borderRadius: 20,
-        padding: "2.5rem",
+        borderRadius: "var(--radius-xl)",
+        padding: "var(--space-xl)",
         position: "relative",
         display: "flex",
         flexDirection: "column",
@@ -93,13 +98,6 @@ function PlanCard({
         boxShadow: plan.popular
           ? "0 20px 60px rgba(27,79,114,0.25)"
           : "0 2px 12px rgba(26,26,46,0.06)",
-        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-      }}
-      whileHover={{
-        y: -4,
-        boxShadow: plan.popular
-          ? "0 28px 70px rgba(27,79,114,0.35)"
-          : "0 10px 40px rgba(26,26,46,0.1)",
       }}
     >
       {plan.popular && (
@@ -112,8 +110,7 @@ function PlanCard({
             background: "var(--gold)",
             color: "var(--ink)",
             fontFamily: "var(--font-mono)",
-            fontSize: "0.6rem",
-            letterSpacing: "0.18em",
+            fontSize: "var(--t-label)",
             padding: "6px 16px",
             borderRadius: 999,
             whiteSpace: "nowrap",
@@ -124,92 +121,106 @@ function PlanCard({
         </div>
       )}
 
-      <div style={{ marginBottom: "0.5rem" }}>
+      <div style={{ marginBottom: "var(--space-xs)" }}>
         <span
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: "0.62rem",
-            letterSpacing: "0.18em",
+            fontSize: "var(--t-label)",
             color: plan.popular ? "rgba(255,255,255,0.6)" : "var(--muted)",
             textTransform: "uppercase",
           }}
         >
-          {plan.name}
+          {plan.nameEn}
         </span>
       </div>
 
-      <div
+      <h3
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "3rem",
-          fontWeight: 300,
-          letterSpacing: "-0.03em",
+          fontSize: "var(--t-subtitle)",
+          fontWeight: 400,
           color: plan.popular ? "white" : "var(--ink)",
-          lineHeight: 1,
-          marginBottom: "0.25rem",
+          marginBottom: "var(--space-sm)",
         }}
       >
-        <motion.span
-          key={price}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          ₺{price.toLocaleString("tr-TR")}
-        </motion.span>
-        <span
-          style={{
-            fontSize: "1rem",
-            fontFamily: "var(--font-body)",
-            fontWeight: 400,
-            opacity: 0.6,
-          }}
-        >
-          /ay
-        </span>
-      </div>
-
-      {yearly && (
-        <div
-          style={{
-            fontFamily: "var(--font-body)",
-            fontSize: "0.78rem",
-            color: plan.popular ? "rgba(255,255,255,0.7)" : "var(--sage)",
-            marginBottom: "0.75rem",
-          }}
-        >
-          Yıllık ödeme · %20 tasarruf
-        </div>
-      )}
+        {plan.name}
+      </h3>
 
       <p
         style={{
           fontFamily: "var(--font-body)",
-          fontSize: "0.85rem",
-          lineHeight: 1.7,
+          fontSize: "var(--t-small)",
           color: plan.popular ? "rgba(255,255,255,0.7)" : "var(--muted)",
-          marginBottom: "1.5rem",
+          marginBottom: "var(--space-lg)",
+          lineHeight: 1.6,
         }}
       >
         {plan.description}
       </p>
 
+      {/* Price */}
+      <div style={{ marginBottom: "var(--space-lg)" }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={price}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 8 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(2rem, 5vw, 3rem)",
+                fontWeight: 300,
+                letterSpacing: "-0.03em",
+                color: plan.popular ? "white" : "var(--ink)",
+                lineHeight: 1,
+              }}
+            >
+              ₺{price.toLocaleString("tr-TR")}
+            </motion.span>
+          </AnimatePresence>
+          <span
+            style={{
+              fontFamily: "var(--font-body)",
+              fontWeight: 400,
+              color: plan.popular ? "rgba(255,255,255,0.6)" : "var(--muted)",
+              fontSize: "var(--t-small)",
+            }}
+          >
+            /ay
+          </span>
+        </div>
+        {yearly && (
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "var(--t-label)",
+              color: plan.popular ? "rgba(255,255,255,0.7)" : "var(--sage)",
+              marginTop: 4,
+            }}
+          >
+            Yıllık ödeme · %20 tasarruf
+          </p>
+        )}
+      </div>
+
       <div
         style={{
           height: 1,
           background: plan.popular ? "rgba(255,255,255,0.15)" : "var(--border)",
-          marginBottom: "1.5rem",
+          marginBottom: "var(--space-lg)",
         }}
       />
 
       <ul
         style={{
           listStyle: "none",
+          flex: 1,
           display: "flex",
           flexDirection: "column",
-          gap: "0.75rem",
-          flex: 1,
-          marginBottom: "2rem",
+          gap: "var(--space-sm)",
+          marginBottom: "var(--space-xl)",
         }}
       >
         {plan.features.map((f, j) => (
@@ -244,11 +255,11 @@ function PlanCard({
             <span
               style={{
                 fontFamily: "var(--font-body)",
-                fontSize: "0.85rem",
-                lineHeight: 1.6,
+                fontSize: "var(--t-small)",
                 color: plan.popular
                   ? "rgba(255,255,255,0.85)"
                   : "var(--ink-soft)",
+                lineHeight: 1.6,
               }}
             >
               {f}
@@ -257,30 +268,11 @@ function PlanCard({
         ))}
       </ul>
 
+      {/* CTA — white or primary CSS class */}
       <Link
-        href={plan.name === "Kurumsal" ? "/contact" : "/register"}
-        style={{
-          display: "block",
-          textAlign: "center",
-          padding: "13px 24px",
-          borderRadius: 10,
-          background: plan.popular ? "white" : "var(--ocean)",
-          color: plan.popular ? "var(--ocean)" : "white",
-          fontFamily: "var(--font-body)",
-          fontSize: "0.88rem",
-          fontWeight: 600,
-          textDecoration: "none",
-          border: plan.popular ? "none" : "none",
-          transition: "all 0.3s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-1px)";
-          e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.15)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "translateY(0)";
-          e.currentTarget.style.boxShadow = "none";
-        }}
+        href={plan.href}
+        className={plan.popular ? "btn-white" : "btn-primary"}
+        style={{ justifyContent: "center" }}
       >
         {plan.cta}
       </Link>
@@ -296,17 +288,16 @@ export function Pricing() {
   return (
     <section
       id="pricing"
+      className="section"
       style={{
         background: "var(--ivory)",
-        paddingTop: "var(--section-y)",
-        paddingBottom: "var(--section-y)",
         borderTop: "1px solid var(--border)",
       }}
     >
       <div className="container">
         <div
           ref={titleRef}
-          style={{ textAlign: "center", marginBottom: "3.5rem" }}
+          style={{ textAlign: "center", marginBottom: "var(--space-3xl)" }}
         >
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -319,23 +310,17 @@ export function Pricing() {
                 alignItems: "center",
                 justifyContent: "center",
                 gap: 12,
-                marginBottom: "1.25rem",
+                marginBottom: "var(--space-md)",
               }}
             >
               <span className="gold-line" />
-              <span className="label">04 · Fiyatlandırma</span>
+              <span className="t-label">04 · Fiyatlandırma</span>
               <span className="gold-line" />
             </div>
+
             <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
-                fontWeight: 300,
-                letterSpacing: "-0.02em",
-                color: "var(--ink)",
-                lineHeight: 1.0,
-                marginBottom: "1.5rem",
-              }}
+              className="t-display"
+              style={{ color: "var(--ink)", marginBottom: "var(--space-xl)" }}
             >
               Satışınız arttıkça{" "}
               <em style={{ fontStyle: "italic", color: "var(--ocean)" }}>
@@ -343,22 +328,28 @@ export function Pricing() {
               </em>
             </h2>
 
-            {/* Toggle */}
+            {/* Billing toggle */}
             <div
-              style={{ display: "inline-flex", alignItems: "center", gap: 12 }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "var(--space-md)",
+              }}
             >
               <span
                 style={{
                   fontFamily: "var(--font-body)",
-                  fontSize: "0.85rem",
+                  fontSize: "var(--t-small)",
                   color: yearly ? "var(--dim)" : "var(--ink)",
                   fontWeight: 500,
                 }}
               >
                 Aylık
               </span>
+
               <button
                 onClick={() => setYearly(!yearly)}
+                aria-label="Yıllık/aylık fiyatlandırma"
                 style={{
                   width: 44,
                   height: 24,
@@ -367,7 +358,8 @@ export function Pricing() {
                   border: "none",
                   cursor: "pointer",
                   position: "relative",
-                  transition: "background 0.3s",
+                  transition: "background var(--duration-base)",
+                  flexShrink: 0,
                 }}
               >
                 <motion.div
@@ -384,11 +376,12 @@ export function Pricing() {
                   }}
                 />
               </button>
+
               <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
                 <span
                   style={{
                     fontFamily: "var(--font-body)",
-                    fontSize: "0.85rem",
+                    fontSize: "var(--t-small)",
                     color: yearly ? "var(--ink)" : "var(--dim)",
                     fontWeight: 500,
                   }}
@@ -401,8 +394,7 @@ export function Pricing() {
                     borderRadius: 999,
                     background: "rgba(107,143,113,0.1)",
                     fontFamily: "var(--font-mono)",
-                    fontSize: "0.6rem",
-                    letterSpacing: "0.1em",
+                    fontSize: "var(--t-label)",
                     color: "var(--sage)",
                   }}
                 >
@@ -414,12 +406,8 @@ export function Pricing() {
         </div>
 
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: "1.5rem",
-            alignItems: "center",
-          }}
+          className="grid grid-cols-1 lg:grid-cols-3"
+          style={{ gap: "var(--space-lg)", alignItems: "center" }}
         >
           {plans.map((plan, i) => (
             <PlanCard key={i} plan={plan} index={i} yearly={yearly} />
@@ -433,12 +421,12 @@ export function Pricing() {
           transition={{ delay: 0.4 }}
           style={{
             textAlign: "center",
-            marginTop: "2.5rem",
+            marginTop: "var(--space-xl)",
             fontFamily: "var(--font-mono)",
-            fontSize: "0.68rem",
-            letterSpacing: "0.14em",
+            fontSize: "var(--t-label)",
             color: "var(--dim)",
             textTransform: "uppercase",
+            letterSpacing: "0.14em",
           }}
         >
           14 gün ücretsiz · Kredi kartı gerekmez · İstediğinde iptal

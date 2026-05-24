@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap');
 
 @import "tailwindcss";
 
@@ -16,72 +16,72 @@
      xl:  1280px                                        */
 
   /* ── Color palette ── */
-  --sand: #f5f0e8;
-  --sand-deep: #ede5d8;
-  --ivory: #faf8f4;
-  --dune: #ddd5c4;
-  --dune-light: #eae3d6;
-  --ocean: #1b4f72;
-  --ocean-mid: #2e86c1;
-  --ocean-light: #5ba4cf;
-  --ocean-pale: #d6eaf8;
-  --gold: #c9a96e;
-  --gold-light: #dec48f;
-  --gold-pale: #f4ecd9;
-  --terra: #7d4e2d;
-  --sage: #6b8f71;
-  --ink: #1a1a2e;
-  --ink-soft: #2c3e50;
-  --muted: #6b7280;
-  --dim: #9ca3af;
-  --bg: var(--ivory);
-  --bg-section: var(--sand);
-  --bg-card: #ffffff;
-  --border: rgba(26, 26, 46, 0.1);
-  --border-soft: rgba(26, 26, 46, 0.06);
+  --sand:          #F5F0E8;
+  --sand-deep:     #EDE5D8;
+  --ivory:         #FAF8F4;
+  --dune:          #DDD5C4;
+  --dune-light:    #EAE3D6;
+  --ocean:         #1B4F72;
+  --ocean-mid:     #2E86C1;
+  --ocean-light:   #5BA4CF;
+  --ocean-pale:    #D6EAF8;
+  --gold:          #C9A96E;
+  --gold-light:    #DEC48F;
+  --gold-pale:     #F4ECD9;
+  --terra:         #7D4E2D;
+  --sage:          #6B8F71;
+  --ink:           #1A1A2E;
+  --ink-soft:      #2C3E50;
+  --muted:         #6B7280;
+  --dim:           #9CA3AF;
+  --bg:            var(--ivory);
+  --bg-section:    var(--sand);
+  --bg-card:       #FFFFFF;
+  --border:        rgba(26,26,46,0.1);
+  --border-soft:   rgba(26,26,46,0.06);
 
   /* ── Typography ── */
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Inter", system-ui, sans-serif;
-  --font-mono: "DM Mono", monospace;
+  --font-display:  'Cormorant Garamond', Georgia, serif;
+  --font-body:     'Inter', system-ui, sans-serif;
+  --font-mono:     'DM Mono', monospace;
 
   /* ── Fluid type scale ──
      Formula: clamp(MIN, PREFERRED_VW, MAX)
      MIN  = mobile minimum
      VW   = scales with viewport
      MAX  = desktop cap                                 */
-  --t-hero: clamp(2.8rem, 8vw, 7.5rem); /* Hero headline     */
-  --t-display: clamp(2.2rem, 5.5vw, 5rem); /* Section titles    */
-  --t-title: clamp(1.6rem, 3.5vw, 3rem); /* Card/modal titles */
-  --t-subtitle: clamp(1.2rem, 2.5vw, 2rem); /* Subtitles         */
-  --t-body: clamp(0.9rem, 1.5vw, 1rem); /* Body text         */
-  --t-small: clamp(0.78rem, 1.2vw, 0.88rem); /* Secondary text    */
-  --t-label: clamp(0.65rem, 1vw, 0.72rem); /* Labels/badges     */
+  --t-hero:        clamp(2.8rem, 8vw,  7.5rem);   /* Hero headline     */
+  --t-display:     clamp(2.2rem, 5.5vw, 5rem);    /* Section titles    */
+  --t-title:       clamp(1.6rem, 3.5vw, 3rem);    /* Card/modal titles */
+  --t-subtitle:    clamp(1.2rem, 2.5vw, 2rem);    /* Subtitles         */
+  --t-body:        clamp(0.9rem, 1.5vw, 1rem);    /* Body text         */
+  --t-small:       clamp(0.78rem, 1.2vw, 0.88rem);/* Secondary text    */
+  --t-label:       clamp(0.65rem, 1vw, 0.72rem);  /* Labels/badges     */
 
   /* ── Fluid spacing scale ── */
-  --space-xs: clamp(0.25rem, 0.5vw, 0.5rem);
-  --space-sm: clamp(0.5rem, 1vw, 0.75rem);
-  --space-md: clamp(0.75rem, 1.5vw, 1.25rem);
-  --space-lg: clamp(1rem, 2vw, 1.75rem);
-  --space-xl: clamp(1.5rem, 3vw, 2.5rem);
-  --space-2xl: clamp(2rem, 5vw, 4rem);
-  --space-3xl: clamp(3rem, 8vw, 7rem);
-  --space-section: clamp(4rem, 10vw, 9rem);
+  --space-xs:      clamp(0.25rem, 0.5vw,  0.5rem);
+  --space-sm:      clamp(0.5rem,  1vw,    0.75rem);
+  --space-md:      clamp(0.75rem, 1.5vw,  1.25rem);
+  --space-lg:      clamp(1rem,    2vw,    1.75rem);
+  --space-xl:      clamp(1.5rem,  3vw,    2.5rem);
+  --space-2xl:     clamp(2rem,    5vw,    4rem);
+  --space-3xl:     clamp(3rem,    8vw,    7rem);
+  --space-section: clamp(4rem,    10vw,   9rem);
 
   /* ── Fluid container widths ── */
-  --container: min(1280px, 100% - 3rem);
-  --container-sm: min(860px, 100% - 2rem);
-  --container-xs: min(520px, 100% - 2rem);
+  --container:     min(1280px, 100% - 3rem);
+  --container-sm:  min(860px,  100% - 2rem);
+  --container-xs:  min(520px,  100% - 2rem);
 
   /* ── Fluid border radius ── */
-  --radius-sm: clamp(6px, 1vw, 8px);
-  --radius-md: clamp(8px, 1.5vw, 12px);
-  --radius-lg: clamp(12px, 2vw, 20px);
-  --radius-xl: clamp(16px, 3vw, 28px);
+  --radius-sm:     clamp(6px,  1vw,  8px);
+  --radius-md:     clamp(8px,  1.5vw, 12px);
+  --radius-lg:     clamp(12px, 2vw,  20px);
+  --radius-xl:     clamp(16px, 3vw,  28px);
 
   /* ── Animation ── */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 150ms;
   --duration-base: 300ms;
   --duration-slow: 600ms;
@@ -92,9 +92,7 @@
    RESET
    ═══════════════════════════════════════════════════ */
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -155,7 +153,7 @@ body {
   font-family: var(--font-display);
   font-size: var(--t-display);
   font-weight: 300;
-  line-height: 1;
+  line-height: 1.0;
   letter-spacing: -0.02em;
 }
 
@@ -238,7 +236,7 @@ body {
 .auth-layout {
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 100svh; /* svh = small viewport height, safe on mobile */
+  min-height: 100svh;   /* svh = small viewport height, safe on mobile */
 }
 
 @media (min-width: 768px) {
@@ -257,19 +255,10 @@ body {
    SCROLLBAR
    ═══════════════════════════════════════════════════ */
 
-::-webkit-scrollbar {
-  width: 3px;
-}
-::-webkit-scrollbar-track {
-  background: var(--sand);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--gold);
-  border-radius: 2px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--gold-light);
-}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--sand); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
 
 ::selection {
   background: var(--ocean-pale);
@@ -280,16 +269,8 @@ body {
    UTILITIES
    ═══════════════════════════════════════════════════ */
 
-.hairline {
-  height: 1px;
-  background: var(--border);
-}
-.gold-line {
-  display: inline-block;
-  width: 48px;
-  height: 1px;
-  background: var(--gold);
-}
+.hairline { height: 1px; background: var(--border); }
+.gold-line { display: inline-block; width: 48px; height: 1px; background: var(--gold); }
 .gradient-text {
   background: linear-gradient(135deg, var(--ocean) 0%, var(--ocean-light) 100%);
   -webkit-background-clip: text;
@@ -297,23 +278,16 @@ body {
   background-clip: text;
 }
 
-.hover-underline {
-  position: relative;
-  text-decoration: none;
-}
+.hover-underline { position: relative; text-decoration: none; }
 .hover-underline::after {
-  content: "";
+  content: '';
   position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 0;
-  height: 1px;
+  bottom: -1px; left: 0;
+  width: 0; height: 1px;
   background: var(--ocean);
   transition: width var(--duration-base) var(--ease-in-out);
 }
-.hover-underline:hover::after {
-  width: 100%;
-}
+.hover-underline:hover::after { width: 100%; }
 
 /* ═══════════════════════════════════════════════════
    ANIMATIONS — REDUCED MOTION AWARE
@@ -341,9 +315,7 @@ body {
    ═══════════════════════════════════════════════════ */
 
 /* Minimum tap target size */
-button,
-a,
-[role="button"] {
+button, a, [role="button"] {
   min-height: 44px;
   min-width: 44px;
 }
@@ -370,10 +342,7 @@ button {
    OVERFLOW SAFETY
    ═══════════════════════════════════════════════════ */
 
-img,
-video,
-svg,
-canvas {
+img, video, svg, canvas {
   max-width: 100%;
   height: auto;
 }
@@ -382,4 +351,161 @@ canvas {
 .overflow-wrap {
   overflow-wrap: break-word;
   word-break: break-word;
+}
+
+/* ═══════════════════════════════════════════════════
+   INTERACTION UTILITIES
+   CSS-only hover/focus — eliminates JS onMouseEnter
+   Use these instead of inline event handlers
+   ═══════════════════════════════════════════════════ */
+
+/* ── Button variants ── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: clamp(12px, 2vw, 15px) clamp(20px, 3vw, 32px);
+  border-radius: var(--radius-md);
+  background: var(--ocean); color: white;
+  font-family: var(--font-body); font-size: var(--t-small); font-weight: 600;
+  text-decoration: none; border: none; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(27,79,114,0.25);
+  transition: background var(--duration-base) var(--ease-in-out),
+              transform var(--duration-base) var(--ease-out-expo),
+              box-shadow var(--duration-base) var(--ease-in-out);
+}
+.btn-primary:hover {
+  background: #154360;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(27,79,114,0.4);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: clamp(12px, 2vw, 15px) clamp(16px, 2.5vw, 28px);
+  border-radius: var(--radius-md);
+  background: rgba(26,26,46,0.06); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--t-small); font-weight: 500;
+  text-decoration: none; border: 1px solid rgba(26,26,46,0.1); cursor: pointer;
+  transition: background var(--duration-fast), transform var(--duration-fast);
+}
+.btn-ghost:hover {
+  background: rgba(26,26,46,0.1);
+  transform: translateY(-1px);
+}
+
+.btn-white {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: clamp(14px, 2vw, 18px) clamp(32px, 5vw, 56px);
+  border-radius: var(--radius-md);
+  background: white; color: var(--ocean);
+  font-family: var(--font-body); font-size: var(--t-body); font-weight: 700;
+  border: none; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  transition: transform var(--duration-base) var(--ease-out-expo),
+              box-shadow var(--duration-base) var(--ease-in-out);
+}
+.btn-white:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: clamp(10px, 2vw, 13px) clamp(16px, 2.5vw, 24px);
+  border-radius: var(--radius-md);
+  background: transparent; color: var(--ink-soft);
+  font-family: var(--font-body); font-size: var(--t-small); font-weight: 500;
+  text-decoration: none; border: 1px solid var(--border); cursor: pointer;
+  transition: background var(--duration-fast), border-color var(--duration-fast);
+}
+.btn-outline:hover {
+  background: var(--sand);
+  border-color: var(--ocean);
+}
+
+/* ── Nav link ── */
+.nav-link {
+  font-family: var(--font-body); font-size: var(--t-small); font-weight: 500;
+  color: var(--ink-soft); text-decoration: none;
+  transition: color var(--duration-fast);
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute; bottom: -2px; left: 0;
+  width: 0; height: 1px; background: var(--ocean);
+  transition: width var(--duration-base) var(--ease-in-out);
+}
+.nav-link:hover { color: var(--ocean); }
+.nav-link:hover::after { width: 100%; }
+
+/* ── Icon button ── */
+.icon-action {
+  width: 34px; height: 34px; border-radius: 8px;
+  border: 1px solid var(--border); background: white;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); text-decoration: none; cursor: pointer;
+  transition: border-color var(--duration-fast), color var(--duration-fast),
+              background var(--duration-fast);
+  flex-shrink: 0;
+}
+.icon-action:hover {
+  border-color: var(--ocean);
+  color: var(--ocean);
+  background: rgba(27,79,114,0.04);
+}
+
+/* ── Card hover lift ── */
+.card-hover {
+  transition: transform var(--duration-base) var(--ease-out-expo),
+              box-shadow var(--duration-base) var(--ease-in-out);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(26,26,46,0.1);
+}
+
+/* ── Row hover ── */
+.row-hover {
+  transition: background var(--duration-fast);
+}
+.row-hover:hover { background: var(--sand); }
+
+/* ── Footer link ── */
+.footer-link {
+  font-family: var(--font-body); font-size: var(--t-small);
+  color: var(--ink-soft); text-decoration: none;
+  transition: color var(--duration-fast);
+  display: block;
+}
+.footer-link:hover { color: var(--ocean); }
+
+/* ── Login input focus ── */
+.form-input {
+  width: 100%;
+  padding: clamp(10px, 2vw, 12px) 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: white;
+  font-family: var(--font-body); font-size: var(--t-small); color: var(--ink);
+  outline: none;
+  transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
+}
+.form-input:focus {
+  border-color: var(--ocean);
+  box-shadow: 0 0 0 3px rgba(27,79,114,0.08);
+}
+
+/* ── Social icon ── */
+.social-icon {
+  width: 34px; height: 34px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg-card);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: var(--t-label);
+  color: var(--muted); text-decoration: none;
+  transition: border-color var(--duration-fast), color var(--duration-fast);
+}
+.social-icon:hover {
+  border-color: var(--ocean);
+  color: var(--ocean);
 }

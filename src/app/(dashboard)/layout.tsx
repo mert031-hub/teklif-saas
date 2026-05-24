@@ -22,6 +22,11 @@ export default async function DashboardLayout({
 
   if (!profile?.agency_id) redirect("/onboarding");
 
+  // agencies join returns array — take first
+  const agency = Array.isArray(profile.agencies)
+    ? (profile.agencies[0] ?? null)
+    : (profile.agencies ?? null);
+
   return (
     <div
       style={{
@@ -30,9 +35,7 @@ export default async function DashboardLayout({
         background: "var(--ivory)",
       }}
     >
-      {/* Desktop sidebar — hidden on mobile (sidebar component handles this) */}
-      <Sidebar agency={profile.agencies} />
-
+      <Sidebar agency={agency} />
       <div
         style={{
           flex: 1,
@@ -42,16 +45,18 @@ export default async function DashboardLayout({
           minWidth: 0,
         }}
       >
-        <DashboardHeader user={user} profile={profile} />
+        <DashboardHeader
+          user={user}
+          profile={{ ...profile, agencies: agency }}
+        />
+        {/*
+          padding-bottom accounts for mobile bottom nav (60px).
+          On md+ (desktop), sidebar replaces bottom nav so no extra padding needed.
+          We use a CSS custom property trick: define --nav-height per breakpoint.
+        */}
         <main
-          style={{
-            flex: 1,
-            /* Bottom padding for mobile nav bar */
-            padding:
-              "var(--space-xl) var(--space-xl) calc(var(--space-xl) + 60px)",
-            overflowY: "auto",
-          }}
-          className="md:p-[var(--space-xl)]"
+          style={{ flex: 1, overflowY: "auto" }}
+          className="p-4 pb-[calc(1rem+60px)] md:p-8 md:pb-8"
         >
           {children}
         </main>

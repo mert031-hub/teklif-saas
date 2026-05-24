@@ -12,13 +12,13 @@ export function CTA() {
     <section
       style={{
         background: "var(--ocean)",
-        paddingTop: "var(--section-y)",
-        paddingBottom: "var(--section-y)",
+        paddingTop: "var(--space-section)",
+        paddingBottom: "var(--space-section)",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Background atmosphere */}
+      {/* Atmospheric background */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
         <motion.div
           animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -55,7 +55,6 @@ export function CTA() {
             filter: "blur(70px)",
           }}
         />
-        {/* Grain */}
         <div
           style={{
             position: "absolute",
@@ -77,13 +76,14 @@ export function CTA() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
+          {/* Eyebrow */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               gap: 12,
-              marginBottom: "2rem",
+              marginBottom: "var(--space-xl)",
             }}
           >
             <span
@@ -95,13 +95,8 @@ export function CTA() {
               }}
             />
             <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.62rem",
-                letterSpacing: "0.22em",
-                color: "rgba(255,255,255,0.6)",
-                textTransform: "uppercase",
-              }}
+              className="t-label"
+              style={{ color: "rgba(255,255,255,0.6)" }}
             >
               06 · Başlayın
             </span>
@@ -115,15 +110,16 @@ export function CTA() {
             />
           </div>
 
+          {/* Headline */}
           <h2
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.8rem, 7vw, 7rem)",
+              fontSize: "var(--t-hero)",
               fontWeight: 300,
               letterSpacing: "-0.025em",
               color: "white",
               lineHeight: 0.95,
-              marginBottom: "1.5rem",
+              marginBottom: "var(--space-lg)",
             }}
           >
             İlk teklifinizi
@@ -139,17 +135,18 @@ export function CTA() {
             transition={{ duration: 0.7, delay: 0.2 }}
             style={{
               fontFamily: "var(--font-body)",
-              fontSize: "1.05rem",
+              fontSize: "var(--t-body)",
               lineHeight: 1.85,
               color: "rgba(255,255,255,0.7)",
               maxWidth: 520,
-              margin: "0 auto 2.5rem",
+              margin: "0 auto var(--space-2xl)",
             }}
           >
             14 gün boyunca tüm özellikleri ücretsiz kullanın. Kredi kartı
             gerekmez. Kurulum yok. 5 dakikada başlayın.
           </motion.p>
 
+          {/* CTAs — CSS class hover, no onMouseEnter */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -158,35 +155,15 @@ export function CTA() {
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
-              gap: "1rem",
-              marginBottom: "3rem",
+              gap: "var(--space-md)",
+              marginBottom: "var(--space-2xl)",
             }}
           >
+            {/* Primary — white button */}
             <Link
               href="/register"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 10,
-                padding: "16px 36px",
-                borderRadius: 12,
-                background: "white",
-                color: "var(--ocean)",
-                fontFamily: "var(--font-body)",
-                fontSize: "0.9rem",
-                fontWeight: 700,
-                textDecoration: "none",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 10px 40px rgba(0,0,0,0.2)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 4px 20px rgba(0,0,0,0.15)";
-              }}
+              className="btn-white"
+              style={{ color: "var(--ocean)" }}
             >
               Ücretsiz Hesap Oluştur
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -199,32 +176,27 @@ export function CTA() {
               </svg>
             </Link>
 
-            <Link
+            {/* Secondary */}
+            <a
               href="#features"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
-                padding: "16px 28px",
-                borderRadius: 12,
+                padding: "clamp(14px, 2vw, 18px) clamp(24px, 4vw, 28px)",
+                borderRadius: "var(--radius-md)",
                 background: "rgba(255,255,255,0.1)",
                 color: "rgba(255,255,255,0.9)",
                 fontFamily: "var(--font-body)",
-                fontSize: "0.9rem",
+                fontSize: "var(--t-small)",
                 fontWeight: 500,
                 textDecoration: "none",
                 border: "1px solid rgba(255,255,255,0.2)",
-                transition: "all 0.3s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.18)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.1)";
+                transition: "background var(--duration-fast)",
               }}
             >
               Özellikleri İncele
-            </Link>
+            </a>
           </motion.div>
 
           {/* Trust indicators */}
@@ -236,7 +208,7 @@ export function CTA() {
               display: "flex",
               flexWrap: "wrap",
               justifyContent: "center",
-              gap: "2rem",
+              gap: "var(--space-xl)",
             }}
           >
             {[
@@ -249,9 +221,8 @@ export function CTA() {
                 key={i}
                 style={{
                   fontFamily: "var(--font-body)",
-                  fontSize: "0.82rem",
+                  fontSize: "var(--t-small)",
                   color: "rgba(255,255,255,0.55)",
-                  fontWeight: 400,
                 }}
               >
                 {item}

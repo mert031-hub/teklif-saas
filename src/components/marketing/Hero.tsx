@@ -242,37 +242,7 @@ function HeroContent() {
             marginBottom: "var(--space-2xl)",
           }}
         >
-          <Link
-            href="/register"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "clamp(12px, 2vw, 15px) clamp(20px, 3vw, 32px)",
-              borderRadius: "var(--radius-md)",
-              background: "var(--ocean)",
-              color: "white",
-              fontFamily: "var(--font-body)",
-              fontSize: "var(--t-small)",
-              fontWeight: 600,
-              textDecoration: "none",
-              boxShadow: "0 4px 20px rgba(27,79,114,0.25)",
-              transition: "all var(--duration-base)",
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#154360";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 8px 30px rgba(27,79,114,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--ocean)";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 20px rgba(27,79,114,0.25)";
-            }}
-          >
+          <Link href="/register" className="btn-primary">
             Ücretsiz Başla
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path
@@ -284,35 +254,9 @@ function HeroContent() {
             </svg>
           </Link>
 
-          <Link
-            href="#how-it-works"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "clamp(12px, 2vw, 15px) clamp(16px, 2.5vw, 28px)",
-              borderRadius: "var(--radius-md)",
-              background: "rgba(26,26,46,0.06)",
-              color: "var(--ink)",
-              fontFamily: "var(--font-body)",
-              fontSize: "var(--t-small)",
-              fontWeight: 500,
-              textDecoration: "none",
-              border: "1px solid rgba(26,26,46,0.1)",
-              transition: "all var(--duration-fast)",
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(26,26,46,0.1)";
-              e.currentTarget.style.transform = "translateY(-1px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(26,26,46,0.06)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
-          >
+          <a href="#how-it-works" className="btn-ghost">
             Nasıl Çalışır?
-          </Link>
+          </a>
         </motion.div>
 
         {/* Stats */}

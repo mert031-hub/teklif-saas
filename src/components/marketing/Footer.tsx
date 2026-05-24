@@ -1,7 +1,8 @@
-"use client";
+// Footer — no 'use client' needed.
+// Hover effects via CSS classes (no onMouseEnter/Leave).
+// Motion.div removed — static footer is correct here.
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 
 const links = {
   Ürün: [
@@ -30,27 +31,6 @@ const links = {
   ],
 };
 
-function FooterLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link
-      href={href}
-      className="hover-underline"
-      style={{
-        fontFamily: "var(--font-body)",
-        fontSize: "var(--t-small)",
-        color: "var(--ink-soft)",
-        textDecoration: "none",
-        transition: "color var(--duration-fast)",
-        display: "block",
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ocean)")}
-      onMouseLeave={(e) => (e.currentTarget.style.color = "var(--ink-soft)")}
-    >
-      {label}
-    </Link>
-  );
-}
-
 export function Footer() {
   return (
     <footer
@@ -62,11 +42,6 @@ export function Footer() {
       }}
     >
       <div className="container">
-        {/* Top grid:
-            Mobile:  1 col (brand + links stacked)
-            Tablet:  2 col (brand | 2×2 link grid)
-            Desktop: 5 col (brand | 4 link cols)
-        */}
         <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5"
           style={{ gap: "var(--space-2xl)", marginBottom: "var(--space-3xl)" }}
@@ -115,6 +90,7 @@ export function Footer() {
                 TeklifAI
               </span>
             </Link>
+
             <p
               style={{
                 fontFamily: "var(--font-body)",
@@ -127,42 +103,22 @@ export function Footer() {
             >
               Turizm acenteleri için yeni nesil interaktif teklif platformu.
             </p>
+
+            {/* Social — CSS hover via .social-icon class */}
             <div style={{ display: "flex", gap: "var(--space-sm)" }}>
-              {["X", "in", "ig"].map((s) => (
-                <a
-                  key={s}
-                  href="#"
-                  style={{
-                    width: 34,
-                    height: 34,
-                    borderRadius: 8,
-                    border: "1px solid var(--border)",
-                    background: "var(--bg-card)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "var(--t-label)",
-                    color: "var(--muted)",
-                    textDecoration: "none",
-                    transition: "all var(--duration-fast)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = "var(--ocean)";
-                    e.currentTarget.style.color = "var(--ocean)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = "var(--border)";
-                    e.currentTarget.style.color = "var(--muted)";
-                  }}
-                >
+              {[
+                { s: "X", href: "#" },
+                { s: "in", href: "#" },
+                { s: "ig", href: "#" },
+              ].map(({ s, href }) => (
+                <a key={s} href={href} className="social-icon">
                   {s}
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Link cols — 2×2 on tablet, each its own col on desktop */}
+          {/* Link columns — CSS hover via .footer-link class */}
           {Object.entries(links).map(([category, items]) => (
             <div key={category}>
               <div
@@ -171,6 +127,7 @@ export function Footer() {
                   fontSize: "var(--t-label)",
                   color: "var(--muted)",
                   textTransform: "uppercase",
+                  letterSpacing: "0.15em",
                   marginBottom: "var(--space-md)",
                 }}
               >
@@ -186,7 +143,9 @@ export function Footer() {
               >
                 {items.map((item) => (
                   <li key={item.label}>
-                    <FooterLink href={item.href} label={item.label} />
+                    <Link href={item.href} className="footer-link">
+                      {item.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -194,10 +153,8 @@ export function Footer() {
           ))}
         </div>
 
-        {/* Divider */}
         <div className="hairline" style={{ marginBottom: "var(--space-lg)" }} />
 
-        {/* Bottom row */}
         <div
           style={{
             display: "flex",
@@ -238,7 +195,7 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Big wordmark — scales with viewport */}
+        {/* Ghost wordmark */}
         <div
           style={{
             marginTop: "var(--space-2xl)",

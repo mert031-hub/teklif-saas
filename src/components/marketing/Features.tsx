@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useBreakpoint } from "@/lib/hooks/useBreakpoint";
 
 const features = [
   {
@@ -54,98 +55,6 @@ const features = [
   },
 ];
 
-function FeatureRow({
-  feature,
-  index,
-}: {
-  feature: (typeof features)[0];
-  index: number;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
-  const isEven = index % 2 === 0;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-      style={{
-        padding: "var(--space-2xl) 0",
-        borderBottom: "1px solid var(--border-soft)",
-      }}
-    >
-      {/* Mobile: stacked, number on top */}
-      <div
-        className="block md:hidden"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "var(--space-lg)",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(3.5rem, 15vw, 6rem)",
-            fontWeight: 300,
-            lineHeight: 0.85,
-            color: "transparent",
-            WebkitTextStroke: `1px ${feature.accent === "var(--ocean)" ? "rgba(27,79,114,0.2)" : "rgba(201,169,110,0.3)"}`,
-            letterSpacing: "-0.03em",
-            userSelect: "none",
-          }}
-        >
-          {feature.number}
-        </div>
-        <FeatureContent feature={feature} />
-      </div>
-
-      {/* Tablet+: side by side, alternating */}
-      <div
-        className="hidden md:grid"
-        style={{
-          gridTemplateColumns: "1fr 1fr",
-          gap: "var(--space-3xl)",
-          alignItems: "center",
-        }}
-      >
-        <div
-          style={{
-            order: isEven ? 0 : 1,
-            textAlign: isEven ? "left" : "right",
-          }}
-        >
-          <motion.div
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: "clamp(5rem, 12vw, 10rem)",
-              fontWeight: 300,
-              lineHeight: 0.85,
-              color: "transparent",
-              WebkitTextStroke: `1px ${feature.accent === "var(--ocean)" ? "rgba(27,79,114,0.15)" : "rgba(201,169,110,0.25)"}`,
-              letterSpacing: "-0.03em",
-              userSelect: "none",
-              transition: "all 0.4s",
-            }}
-            whileHover={
-              {
-                WebkitTextStroke: `1px ${feature.accent}`,
-              } as any
-            }
-          >
-            {feature.number}
-          </motion.div>
-        </div>
-        <div style={{ order: isEven ? 1 : 0 }}>
-          <FeatureContent feature={feature} />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
 function FeatureContent({ feature }: { feature: (typeof features)[0] }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true });
@@ -174,7 +83,6 @@ function FeatureContent({ feature }: { feature: (typeof features)[0] }) {
           {feature.tag}
         </span>
       </div>
-
       <h3
         style={{
           fontFamily: "var(--font-display)",
@@ -188,7 +96,6 @@ function FeatureContent({ feature }: { feature: (typeof features)[0] }) {
       >
         {feature.title}
       </h3>
-
       <p
         style={{
           fontFamily: "var(--font-body)",
@@ -200,7 +107,6 @@ function FeatureContent({ feature }: { feature: (typeof features)[0] }) {
       >
         {feature.description}
       </p>
-
       <motion.div
         initial={{ width: 0 }}
         animate={inView ? { width: 48 } : {}}
@@ -212,6 +118,97 @@ function FeatureContent({ feature }: { feature: (typeof features)[0] }) {
         }}
       />
     </div>
+  );
+}
+
+function FeatureRow({
+  feature,
+  index,
+}: {
+  feature: (typeof features)[0];
+  index: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const isMobile = useBreakpoint("md");
+  const isEven = index % 2 === 0;
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        padding: "var(--space-2xl) 0",
+        borderBottom: "1px solid var(--border-soft)",
+      }}
+    >
+      {isMobile ? (
+        /* ── Mobile: number + content stacked ── */
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--space-lg)",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "clamp(4rem, 20vw, 7rem)",
+              fontWeight: 300,
+              lineHeight: 0.85,
+              color: "transparent",
+              WebkitTextStroke: `1px ${feature.accent === "var(--ocean)" ? "rgba(27,79,114,0.2)" : "rgba(201,169,110,0.3)"}`,
+              letterSpacing: "-0.03em",
+              userSelect: "none",
+            }}
+          >
+            {feature.number}
+          </div>
+          <FeatureContent feature={feature} />
+        </div>
+      ) : (
+        /* ── Desktop: alternating 2-col ── */
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "var(--space-3xl)",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              order: isEven ? 0 : 1,
+              textAlign: isEven ? "left" : "right",
+            }}
+          >
+            <motion.div
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(5rem, 12vw, 10rem)",
+                fontWeight: 300,
+                lineHeight: 0.85,
+                color: "transparent",
+                WebkitTextStroke: `1px ${feature.accent === "var(--ocean)" ? "rgba(27,79,114,0.15)" : "rgba(201,169,110,0.25)"}`,
+                letterSpacing: "-0.03em",
+                userSelect: "none",
+                display: "block",
+              }}
+              whileHover={{ WebkitTextStroke: `1px ${feature.accent}` } as any}
+              transition={{ duration: 0.3 }}
+            >
+              {feature.number}
+            </motion.div>
+          </div>
+          <div style={{ order: isEven ? 1 : 0 }}>
+            <FeatureContent feature={feature} />
+          </div>
+        </div>
+      )}
+    </motion.div>
   );
 }
 
@@ -254,7 +251,6 @@ export function Features() {
             </h2>
           </motion.div>
         </div>
-
         {features.map((f, i) => (
           <FeatureRow key={i} feature={f} index={i} />
         ))}

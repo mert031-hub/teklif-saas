@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
+/* ─── Types ─── */
 interface OnboardingData {
   agencyName: string;
   agencySlug: string;
@@ -14,6 +15,7 @@ interface OnboardingData {
   city: string;
 }
 
+/* ─── Constants ─── */
 const BRAND_COLORS = [
   { label: "Okyanus", value: "#1B4F72" },
   { label: "Sage", value: "#4A7C6B" },
@@ -23,6 +25,32 @@ const BRAND_COLORS = [
   { label: "Burgundy", value: "#6B2737" },
 ];
 
+/* ─── Validation ─── */
+function sanitize(val: string): string {
+  return val
+    .replace(/<[^>]*>/g, "")
+    .replace(/[<>'"`;]/g, "")
+    .trim();
+}
+
+const SLUG_REGEX = /^[a-z0-9][a-z0-9-]{0,58}[a-z0-9]$|^[a-z0-9]$/;
+const PHONE_REGEX = /^[\+]?[\d\s\-\(\)]{7,20}$/;
+
+function validateStep1(d: OnboardingData): string | null {
+  const name = sanitize(d.agencyName);
+  if (!name || name.length < 2) return "Acente adı en az 2 karakter olmalıdır.";
+  if (name.length > 100) return "Acente adı en fazla 100 karakter olabilir.";
+  if (!d.agencySlug) return "Teklif URL'i boş bırakılamaz.";
+  if (!SLUG_REGEX.test(d.agencySlug))
+    return "URL yalnızca küçük harf, rakam ve tire içerebilir.";
+  if (d.phone && !PHONE_REGEX.test(d.phone))
+    return "Geçerli bir telefon numarası girin.";
+  if (d.website && !/^https?:\/\/.+/.test(d.website))
+    return "Web sitesi http:// veya https:// ile başlamalıdır.";
+  return null;
+}
+
+/* ─── Shared input styles ─── */
 const inputStyle: React.CSSProperties = {
   width: "100%",
   padding: "clamp(10px, 2vw, 12px) 14px",
@@ -36,7 +64,6 @@ const inputStyle: React.CSSProperties = {
   transition:
     "border-color var(--duration-fast), box-shadow var(--duration-fast)",
 };
-
 const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   e.currentTarget.style.borderColor = "var(--ocean)";
   e.currentTarget.style.boxShadow = "0 0 0 3px rgba(27,79,114,0.08)";
@@ -46,7 +73,7 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   e.currentTarget.style.boxShadow = "none";
 };
 
-/* ── Step indicator ── */
+/* ─── Step indicator ─── */
 function StepIndicator({ current, total }: { current: number; total: number }) {
   return (
     <div
@@ -102,7 +129,31 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
   );
 }
 
-/* ── Step 1: Agency info ── */
+/* ─── Inline error banner ─── */
+function ErrorBanner({ message }: { message: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      style={{
+        padding: "var(--space-sm) var(--space-md)",
+        borderRadius: "var(--radius-sm)",
+        background: "rgba(239,68,68,0.06)",
+        border: "1px solid rgba(239,68,68,0.2)",
+        fontFamily: "var(--font-body)",
+        fontSize: "var(--t-small)",
+        color: "#dc2626",
+        marginTop: "var(--space-md)",
+      }}
+    >
+      {message}
+    </motion.div>
+  );
+}
+
+/* ════════════════════════
+   STEP 1 — Agency info
+   ════════════════════════ */
 function Step1({
   data,
   onChange,
@@ -112,13 +163,27 @@ function Step1({
   onChange: (d: Partial<OnboardingData>) => void;
   onNext: () => void;
 }) {
-  const handleName = (v: string) => {
-    const slug = v
+  const [error, setError] = useState<string | null>(null);
+
+  const handleNameChange = (v: string) => {
+    const clean = sanitize(v);
+    const slug = clean
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^a-z0-9-]/g, "")
-      .replace(/-+/g, "-");
-    onChange({ agencyName: v, agencySlug: slug });
+      .replace(/-+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    onChange({ agencyName: clean, agencySlug: slug });
+    setError(null);
+  };
+
+  const handleNext = () => {
+    const err = validateStep1(data);
+    if (err) {
+      setError(err);
+      return;
+    }
+    onNext();
   };
 
   const isValid = data.agencyName.trim().length >= 2;
@@ -163,6 +228,7 @@ function Step1({
           gap: "var(--space-md)",
         }}
       >
+        {/* Agency name */}
         <div>
           <label
             style={{
@@ -181,13 +247,14 @@ function Step1({
             value={data.agencyName}
             required
             placeholder="Örn: Mavi Deniz Turizm"
-            onChange={(e) => handleName(e.target.value)}
+            onChange={(e) => handleNameChange(e.target.value)}
             style={inputStyle}
             onFocus={onFocus}
             onBlur={onBlur}
           />
         </div>
 
+        {/* Slug */}
         <div>
           <label
             style={{
@@ -223,7 +290,8 @@ function Step1({
                 onChange({
                   agencySlug: e.target.value
                     .toLowerCase()
-                    .replace(/[^a-z0-9-]/g, ""),
+                    .replace(/[^a-z0-9-]/g, "")
+                    .replace(/^-+/, ""),
                 })
               }
               style={{ ...inputStyle, paddingLeft: 112 }}
@@ -233,6 +301,7 @@ function Step1({
           </div>
         </div>
 
+        {/* City + Phone */}
         <div
           className="grid grid-cols-1 sm:grid-cols-2"
           style={{ gap: "var(--space-sm)" }}
@@ -254,7 +323,7 @@ function Step1({
               type="text"
               value={data.city}
               placeholder="İstanbul"
-              onChange={(e) => onChange({ city: e.target.value })}
+              onChange={(e) => onChange({ city: sanitize(e.target.value) })}
               style={inputStyle}
               onFocus={onFocus}
               onBlur={onBlur}
@@ -285,6 +354,7 @@ function Step1({
           </div>
         </div>
 
+        {/* Website */}
         <div>
           <label
             style={{
@@ -310,35 +380,18 @@ function Step1({
         </div>
       </div>
 
+      {error && <ErrorBanner message={error} />}
+
       <button
-        onClick={onNext}
+        onClick={handleNext}
         disabled={!isValid}
+        className="btn-primary"
         style={{
           marginTop: "var(--space-xl)",
           width: "100%",
-          padding: "clamp(12px, 2vw, 14px)",
-          borderRadius: "var(--radius-md)",
-          border: "none",
-          background: isValid ? "var(--ocean)" : "var(--dune)",
-          color: isValid ? "white" : "var(--muted)",
-          fontFamily: "var(--font-body)",
-          fontSize: "var(--t-small)",
-          fontWeight: 600,
+          justifyContent: "center",
+          opacity: isValid ? 1 : 0.5,
           cursor: isValid ? "pointer" : "not-allowed",
-          transition: "all var(--duration-base)",
-          boxShadow: isValid ? "0 4px 16px rgba(27,79,114,0.2)" : "none",
-        }}
-        onMouseEnter={(e) => {
-          if (isValid) {
-            e.currentTarget.style.background = "#154360";
-            e.currentTarget.style.transform = "translateY(-1px)";
-          }
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = isValid
-            ? "var(--ocean)"
-            : "var(--dune)";
-          e.currentTarget.style.transform = "translateY(0)";
         }}
       >
         Devam Et →
@@ -347,7 +400,9 @@ function Step1({
   );
 }
 
-/* ── Step 2: Brand color ── */
+/* ════════════════════════
+   STEP 2 — Brand color
+   ════════════════════════ */
 function Step2({
   data,
   onChange,
@@ -392,7 +447,7 @@ function Step2({
         Müşteri teklif sayfalarında kullanılacak. Sonradan değiştirebilirsiniz.
       </p>
 
-      {/* Preset grid */}
+      {/* Color presets */}
       <div
         style={{
           display: "grid",
@@ -445,7 +500,7 @@ function Step2({
         ))}
       </div>
 
-      {/* Custom picker */}
+      {/* Custom color picker */}
       <div style={{ marginBottom: "var(--space-lg)" }}>
         <label
           style={{
@@ -591,52 +646,15 @@ function Step2({
       <div style={{ display: "flex", gap: "var(--space-sm)" }}>
         <button
           onClick={onBack}
-          style={{
-            flex: 1,
-            padding: "clamp(12px, 2vw, 14px)",
-            borderRadius: "var(--radius-md)",
-            background: "transparent",
-            border: "1px solid var(--border)",
-            fontFamily: "var(--font-body)",
-            fontSize: "var(--t-small)",
-            fontWeight: 500,
-            color: "var(--ink-soft)",
-            cursor: "pointer",
-            transition: "all var(--duration-fast)",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "var(--sand)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "transparent")
-          }
+          className="btn-outline"
+          style={{ flex: 1, justifyContent: "center" }}
         >
           ← Geri
         </button>
         <button
           onClick={onNext}
-          style={{
-            flex: 2,
-            padding: "clamp(12px, 2vw, 14px)",
-            borderRadius: "var(--radius-md)",
-            border: "none",
-            background: "var(--ocean)",
-            color: "white",
-            fontFamily: "var(--font-body)",
-            fontSize: "var(--t-small)",
-            fontWeight: 600,
-            cursor: "pointer",
-            transition: "all var(--duration-base)",
-            boxShadow: "0 4px 16px rgba(27,79,114,0.2)",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#154360";
-            e.currentTarget.style.transform = "translateY(-1px)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "var(--ocean)";
-            e.currentTarget.style.transform = "translateY(0)";
-          }}
+          className="btn-primary"
+          style={{ flex: 2, justifyContent: "center" }}
         >
           Devam Et →
         </button>
@@ -645,17 +663,21 @@ function Step2({
   );
 }
 
-/* ── Step 3: Summary + complete ── */
+/* ════════════════════════
+   STEP 3 — Summary
+   ════════════════════════ */
 function Step3({
   data,
   onComplete,
   onBack,
   isPending,
+  completeError,
 }: {
   data: OnboardingData;
   onComplete: () => void;
   onBack: () => void;
   isPending: boolean;
+  completeError: string | null;
 }) {
   return (
     <motion.div
@@ -665,6 +687,7 @@ function Step3({
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
     >
+      {/* Success icon */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -732,7 +755,7 @@ function Step3({
         Hesabınız oluşturuldu. İşte kurduklarınız:
       </p>
 
-      {/* Summary */}
+      {/* Summary card */}
       <div
         style={{
           padding: "var(--space-lg)",
@@ -744,9 +767,13 @@ function Step3({
         }}
       >
         {[
-          { label: "Acente Adı", value: data.agencyName },
-          { label: "Teklif URL", value: `teklifai.com/${data.agencySlug}` },
-          { label: "Şehir", value: data.city || "—" },
+          { label: "Acente Adı", value: data.agencyName, isColor: false },
+          {
+            label: "Teklif URL",
+            value: `teklifai.com/${data.agencySlug}`,
+            isColor: false,
+          },
+          { label: "Şehir", value: data.city || "—", isColor: false },
           { label: "Marka Rengi", value: data.brandColor, isColor: true },
         ].map((row, i) => (
           <div
@@ -794,60 +821,33 @@ function Step3({
         ))}
       </div>
 
-      <div style={{ display: "flex", gap: "var(--space-sm)" }}>
+      {/* Error */}
+      {completeError && <ErrorBanner message={completeError} />}
+
+      <div
+        style={{
+          display: "flex",
+          gap: "var(--space-sm)",
+          marginTop: completeError ? "var(--space-md)" : 0,
+        }}
+      >
         <button
           onClick={onBack}
           disabled={isPending}
-          style={{
-            flex: 1,
-            padding: "clamp(12px, 2vw, 14px)",
-            borderRadius: "var(--radius-md)",
-            background: "transparent",
-            border: "1px solid var(--border)",
-            fontFamily: "var(--font-body)",
-            fontSize: "var(--t-small)",
-            fontWeight: 500,
-            color: "var(--ink-soft)",
-            cursor: "pointer",
-            transition: "all var(--duration-fast)",
-          }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "var(--sand)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "transparent")
-          }
+          className="btn-outline"
+          style={{ flex: 1, justifyContent: "center" }}
         >
           ← Geri
         </button>
         <button
           onClick={onComplete}
           disabled={isPending}
+          className="btn-primary"
           style={{
             flex: 2,
-            padding: "clamp(12px, 2vw, 14px)",
-            borderRadius: "var(--radius-md)",
-            border: "none",
-            background: isPending ? "rgba(27,79,114,0.6)" : "var(--ocean)",
-            color: "white",
-            fontFamily: "var(--font-body)",
-            fontSize: "var(--t-small)",
-            fontWeight: 600,
+            justifyContent: "center",
+            opacity: isPending ? 0.6 : 1,
             cursor: isPending ? "not-allowed" : "pointer",
-            transition: "all var(--duration-base)",
-            boxShadow: isPending ? "none" : "0 4px 16px rgba(27,79,114,0.2)",
-          }}
-          onMouseEnter={(e) => {
-            if (!isPending) {
-              e.currentTarget.style.background = "#154360";
-              e.currentTarget.style.transform = "translateY(-1px)";
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = isPending
-              ? "rgba(27,79,114,0.6)"
-              : "var(--ocean)";
-            e.currentTarget.style.transform = "translateY(0)";
           }}
         >
           {isPending ? "Oluşturuluyor..." : "Dashboard'a Git →"}
@@ -857,11 +857,14 @@ function Step3({
   );
 }
 
-/* ── Page ── */
+/* ════════════════════════
+   PAGE
+   ════════════════════════ */
 export default function OnboardingPage() {
   const router = useRouter();
   const [step, setStep] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const [completeError, setCompleteError] = useState<string | null>(null);
   const [data, setData] = useState<OnboardingData>({
     agencyName: "",
     agencySlug: "",
@@ -875,34 +878,69 @@ export default function OnboardingPage() {
     setData((prev) => ({ ...prev, ...d }));
 
   const handleComplete = () => {
+    setCompleteError(null);
     startTransition(async () => {
       const supabase = createClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
 
-      const { data: agency, error } = await supabase
+      if (!user) {
+        setCompleteError("Oturum bulunamadı. Lütfen tekrar giriş yapın.");
+        return;
+      }
+
+      // Check slug uniqueness before insert
+      let slug = data.agencySlug;
+      const { data: existing } = await supabase
+        .from("agencies")
+        .select("id")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (existing) {
+        slug = `${slug}-${Math.random().toString(36).slice(2, 6)}`;
+      }
+
+      const { data: agency, error: agencyError } = await supabase
         .from("agencies")
         .insert({
-          name: data.agencyName,
-          slug: data.agencySlug,
-          phone: data.phone || null,
-          website: data.website || null,
+          name: data.agencyName.trim(),
+          slug,
+          phone: data.phone.trim() || null,
+          website: data.website.trim() || null,
           brand_color: data.brandColor,
-          address: data.city || null,
+          address: data.city.trim() || null,
+          owner_id: user.id,
         })
         .select()
         .single();
 
-      if (error || !agency) return;
+      if (agencyError) {
+        setCompleteError(
+          agencyError.code === "23505"
+            ? "Bu acente URL'i zaten kullanımda. Geri dönüp farklı bir isim deneyin."
+            : `Hata: ${agencyError.message || agencyError.code}`,
+        );
+        return;
+      }
 
-      await supabase.from("profiles").upsert({
+      if (!agency) {
+        setCompleteError("Acente verisi alınamadı. Lütfen tekrar deneyin.");
+        return;
+      }
+
+      const { error: profileError } = await supabase.from("profiles").upsert({
         id: user.id,
         agency_id: agency.id,
         full_name: user.user_metadata?.full_name || "",
         role: "owner",
       });
+
+      if (profileError) {
+        setCompleteError(`Profil oluşturulamadı: ${profileError.message}`);
+        return;
+      }
 
       router.push("/dashboard");
     });
@@ -1000,6 +1038,7 @@ export default function OnboardingPage() {
                 onComplete={handleComplete}
                 onBack={() => setStep(1)}
                 isPending={isPending}
+                completeError={completeError}
               />
             )}
           </AnimatePresence>

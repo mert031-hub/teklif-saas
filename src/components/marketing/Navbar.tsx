@@ -39,14 +39,14 @@ export function Navbar() {
           left: 0,
           right: 0,
           zIndex: 100,
-          padding: "0 2rem",
-          transition:
-            "background 0.5s ease, border-color 0.5s ease, backdrop-filter 0.5s ease",
-          background: scrolled ? "rgba(250,248,244,0.88)" : "transparent",
+          padding: "0 var(--space-xl)",
+          background: scrolled ? "rgba(250,248,244,0.92)" : "transparent",
           backdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
           borderBottom: scrolled
-            ? "1px solid rgba(26,26,46,0.08)"
+            ? "1px solid var(--border)"
             : "1px solid transparent",
+          transition:
+            "background 0.5s ease, border-color 0.5s ease, backdrop-filter 0.5s ease",
         }}
       >
         <nav
@@ -60,182 +60,126 @@ export function Navbar() {
           }}
         >
           {/* Logo */}
-          <Link href="/" style={{ textDecoration: "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div
-                style={{
-                  width: 32,
-                  height: 32,
-                  background: "var(--ocean)",
-                  borderRadius: 8,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path
-                    d="M8 2L14 6V10L8 14L2 10V6L8 2Z"
-                    stroke="white"
-                    strokeWidth="1.5"
-                    fill="none"
-                  />
-                  <circle cx="8" cy="8" r="2" fill="white" />
-                </svg>
-              </div>
-              <span
-                style={{
-                  fontFamily: "var(--font-display)",
-                  fontSize: "1.3rem",
-                  fontWeight: 500,
-                  color: "var(--ink)",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Teklif<span style={{ color: "var(--ocean)" }}>AI</span>
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop nav */}
-          <div style={{ display: "flex", alignItems: "center", gap: "2.5rem" }}>
+          <Link
+            href="/"
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
             <div
-              className="hidden md:flex items-center"
-              style={{ gap: "2rem" }}
-            >
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="hover-underline"
-                  style={{
-                    fontFamily: "var(--font-body)",
-                    fontSize: "0.85rem",
-                    fontWeight: 500,
-                    color: "var(--ink-soft)",
-                    textDecoration: "none",
-                    letterSpacing: "0.01em",
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--ocean)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "var(--ink-soft)")
-                  }
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            <div
-              className="hidden md:flex items-center"
-              style={{ gap: "0.75rem" }}
-            >
-              <Link
-                href="/login"
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.85rem",
-                  fontWeight: 500,
-                  color: "var(--ink-soft)",
-                  textDecoration: "none",
-                  padding: "8px 16px",
-                  borderRadius: 8,
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "rgba(26,26,46,0.06)";
-                  e.currentTarget.style.color = "var(--ink)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "transparent";
-                  e.currentTarget.style.color = "var(--ink-soft)";
-                }}
-              >
-                Giriş Yap
-              </Link>
-              <Link
-                href="/register"
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  color: "white",
-                  textDecoration: "none",
-                  padding: "10px 22px",
-                  borderRadius: 10,
-                  background: "var(--ocean)",
-                  transition: "all 0.3s ease",
-                  boxShadow: "0 2px 8px rgba(27,79,114,0.2)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#154360";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 6px 20px rgba(27,79,114,0.35)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "var(--ocean)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 2px 8px rgba(27,79,114,0.2)";
-                }}
-              >
-                Ücretsiz Başla
-              </Link>
-            </div>
-
-            {/* Mobile burger */}
-            <button
-              className="md:hidden"
-              onClick={() => setMenuOpen(!menuOpen)}
               style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 8,
+                width: 32,
+                height: 32,
+                background: "var(--ocean)",
+                borderRadius: 8,
                 display: "flex",
-                flexDirection: "column",
-                gap: 5,
-                alignItems: "flex-end",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
-              <motion.span
-                animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }}
-                style={{
-                  display: "block",
-                  width: 24,
-                  height: 1.5,
-                  background: "var(--ink)",
-                  borderRadius: 2,
-                }}
-              />
-              <motion.span
-                animate={{
-                  opacity: menuOpen ? 0 : 1,
-                  width: menuOpen ? 0 : 18,
-                }}
-                style={{
-                  display: "block",
-                  height: 1.5,
-                  background: "var(--ink)",
-                  borderRadius: 2,
-                }}
-              />
-              <motion.span
-                animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }}
-                style={{
-                  display: "block",
-                  width: 24,
-                  height: 1.5,
-                  background: "var(--ink)",
-                  borderRadius: 2,
-                }}
-              />
-            </button>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M8 2L14 6V10L8 14L2 10V6L8 2Z"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+                <circle cx="8" cy="8" r="2" fill="white" />
+              </svg>
+            </div>
+            <span
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "1.3rem",
+                fontWeight: 500,
+                color: "var(--ink)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Teklif<span style={{ color: "var(--ocean)" }}>AI</span>
+            </span>
+          </Link>
+
+          {/* Desktop links — CSS .nav-link class handles hover */}
+          <div
+            className="hidden md:flex items-center"
+            style={{ gap: "var(--space-2xl)" }}
+          >
+            {navLinks.map((link) => (
+              <a key={link.href} href={link.href} className="nav-link">
+                {link.label}
+              </a>
+            ))}
           </div>
+
+          {/* Auth buttons — CSS .btn-* classes */}
+          <div
+            className="hidden md:flex items-center"
+            style={{ gap: "var(--space-sm)" }}
+          >
+            <Link
+              href="/login"
+              className="btn-outline"
+              style={{ minHeight: "unset", minWidth: "unset" }}
+            >
+              Giriş Yap
+            </Link>
+            <Link
+              href="/register"
+              className="btn-primary"
+              style={{ minHeight: "unset", minWidth: "unset" }}
+            >
+              Ücretsiz Başla
+            </Link>
+          </div>
+
+          {/* Mobile burger */}
+          <button
+            className="flex md:hidden"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 8,
+              flexDirection: "column",
+              gap: 5,
+              alignItems: "flex-end",
+            }}
+          >
+            <motion.span
+              animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 7 : 0 }}
+              style={{
+                display: "block",
+                width: 24,
+                height: 1.5,
+                background: "var(--ink)",
+                borderRadius: 2,
+              }}
+            />
+            <motion.span
+              animate={{ opacity: menuOpen ? 0 : 1, width: menuOpen ? 0 : 18 }}
+              style={{
+                display: "block",
+                height: 1.5,
+                background: "var(--ink)",
+                borderRadius: 2,
+              }}
+            />
+            <motion.span
+              animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -7 : 0 }}
+              style={{
+                display: "block",
+                width: 24,
+                height: 1.5,
+                background: "var(--ink)",
+                borderRadius: 2,
+              }}
+            />
+          </button>
         </nav>
       </motion.header>
 
@@ -252,10 +196,10 @@ export function Navbar() {
               inset: 0,
               background: "var(--ivory)",
               zIndex: 90,
-              paddingTop: 100,
+              padding:
+                "calc(72px + var(--space-xl)) var(--space-xl) var(--space-xl)",
               display: "flex",
               flexDirection: "column",
-              padding: "100px 2rem 2rem",
             }}
           >
             {navLinks.map((link, i) => (
@@ -265,53 +209,52 @@ export function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.07 + 0.1 }}
               >
-                <Link
+                <a
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
                   style={{
                     display: "block",
                     fontFamily: "var(--font-display)",
-                    fontSize: "2.5rem",
+                    fontSize: "var(--t-display)",
                     fontWeight: 300,
                     color: "var(--ink)",
                     textDecoration: "none",
-                    padding: "1rem 0",
+                    padding: "var(--space-md) 0",
                     borderBottom: "1px solid var(--border)",
                     letterSpacing: "-0.01em",
                   }}
                 >
                   {link.label}
-                </Link>
+                </a>
               </motion.div>
             ))}
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.35 }}
               style={{
-                marginTop: "2rem",
+                marginTop: "var(--space-xl)",
                 display: "flex",
                 flexDirection: "column",
-                gap: "1rem",
+                gap: "var(--space-sm)",
               }}
             >
               <Link
                 href="/register"
                 onClick={() => setMenuOpen(false)}
-                style={{
-                  display: "block",
-                  textAlign: "center",
-                  padding: "1rem",
-                  borderRadius: 12,
-                  background: "var(--ocean)",
-                  color: "white",
-                  fontFamily: "var(--font-body)",
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                }}
+                className="btn-primary"
+                style={{ justifyContent: "center" }}
               >
                 Ücretsiz Başla
+              </Link>
+              <Link
+                href="/login"
+                onClick={() => setMenuOpen(false)}
+                className="btn-outline"
+                style={{ justifyContent: "center" }}
+              >
+                Giriş Yap
               </Link>
             </motion.div>
           </motion.div>

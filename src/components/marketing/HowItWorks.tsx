@@ -9,21 +9,21 @@ const steps = [
     number: "01",
     title: "Teklif Oluştur",
     description:
-      "Şablonlardan birini seç, bloklarını sürükle-bırak ile düzenle. Otel, uçuş, galeri, video, fiyat — her şey hazır.",
+      "Şablonlardan birini seç, bloklarını düzenle. Otel, uçuş, galeri, video, fiyat — her şey hazır.",
     detail: "Ort. 4 dakika 38 saniye",
   },
   {
     number: "02",
     title: "Müşteriye Gönder",
     description:
-      "WhatsApp veya e-posta ile tek tıkla paylaş. Müşteri hesap açmadan, uygulama indirmeden anında görüntüler.",
+      "WhatsApp veya e-posta ile tek tıkla paylaş. Müşteri hesap açmadan anında görüntüler.",
     detail: "Link · QR Kod · E-posta",
   },
   {
     number: "03",
     title: "Takip Et",
     description:
-      "Müşteri teklifi açtığında bildirim alırsın. Hangi bölümde ne kadar vakit geçirdiğini anlık olarak görürsün.",
+      "Müşteri teklifi açtığında bildirim alırsın. Hangi bölümde ne kadar kaldığını anlık görürsün.",
     detail: "Anlık bildirim · Isı haritası",
   },
   {
@@ -42,38 +42,26 @@ function StepCard({ step, index }: { step: (typeof steps)[0]; index: number }) {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{
-        duration: 0.7,
+        duration: 0.6,
         delay: index * 0.1,
         ease: [0.16, 1, 0.3, 1],
       }}
-      style={{
-        padding: "2.5rem",
-        borderRight:
-          index < steps.length - 1 ? "1px solid var(--border)" : "none",
-        position: "relative",
-        overflow: "hidden",
-        transition: "background 0.3s ease",
-        cursor: "default",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.background = "var(--ocean-pale)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.background = "transparent";
-      }}
+      /* CSS hover via .row-hover class */
+      className="row-hover"
+      style={{ padding: "var(--space-xl)", cursor: "default" }}
     >
       <div
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "3.5rem",
+          fontSize: "clamp(2.5rem, 6vw, 3.5rem)",
           fontWeight: 300,
-          color: "rgba(27,79,114,0.12)",
           lineHeight: 1,
-          marginBottom: "1.5rem",
+          color: "rgba(27,79,114,0.14)",
           letterSpacing: "-0.03em",
+          marginBottom: "var(--space-lg)",
         }}
       >
         {step.number}
@@ -82,11 +70,11 @@ function StepCard({ step, index }: { step: (typeof steps)[0]; index: number }) {
       <h3
         style={{
           fontFamily: "var(--font-display)",
-          fontSize: "1.5rem",
+          fontSize: "var(--t-subtitle)",
           fontWeight: 400,
           color: "var(--ink)",
           letterSpacing: "-0.01em",
-          marginBottom: "0.75rem",
+          marginBottom: "var(--space-sm)",
         }}
       >
         {step.title}
@@ -95,10 +83,10 @@ function StepCard({ step, index }: { step: (typeof steps)[0]; index: number }) {
       <p
         style={{
           fontFamily: "var(--font-body)",
-          fontSize: "0.88rem",
+          fontSize: "var(--t-small)",
           lineHeight: 1.8,
           color: "var(--muted)",
-          marginBottom: "1.5rem",
+          marginBottom: "var(--space-lg)",
         }}
       >
         {step.description}
@@ -118,8 +106,7 @@ function StepCard({ step, index }: { step: (typeof steps)[0]; index: number }) {
         <span
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: "0.62rem",
-            letterSpacing: "0.12em",
+            fontSize: "var(--t-label)",
             color: "var(--ocean)",
             textTransform: "uppercase",
           }}
@@ -138,129 +125,92 @@ export function HowItWorks() {
   return (
     <section
       id="how-it-works"
+      className="section"
       style={{
         background: "var(--sand)",
-        paddingTop: "var(--section-y)",
-        paddingBottom: "var(--section-y)",
         borderTop: "1px solid var(--border)",
       }}
     >
       <div className="container">
         {/* Header */}
-        <div
-          ref={titleRef}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "4rem",
-            marginBottom: "5rem",
-            alignItems: "end",
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={titleInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
+        <div ref={titleRef} style={{ marginBottom: "var(--space-3xl)" }}>
+          <div
+            className="grid grid-cols-1 md:grid-cols-2"
+            style={{ gap: "var(--space-2xl)", alignItems: "end" }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                marginBottom: "1.25rem",
-              }}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={titleInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7 }}
             >
-              <span className="gold-line" />
-              <span className="label">03 · Nasıl Çalışır</span>
-            </div>
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "clamp(2.4rem, 5vw, 4.5rem)",
-                fontWeight: 300,
-                letterSpacing: "-0.02em",
-                color: "var(--ink)",
-                lineHeight: 1.0,
-              }}
-            >
-              Dört adımda{" "}
-              <em style={{ fontStyle: "italic", color: "var(--ocean)" }}>
-                mükemmel satış
-              </em>
-            </h2>
-          </motion.div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  marginBottom: "var(--space-md)",
+                }}
+              >
+                <span className="gold-line" />
+                <span className="t-label">03 · Nasıl Çalışır</span>
+              </div>
+              <h2 className="t-display" style={{ color: "var(--ink)" }}>
+                Dört adımda{" "}
+                <em style={{ fontStyle: "italic", color: "var(--ocean)" }}>
+                  mükemmel satış
+                </em>
+              </h2>
+            </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={titleInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "1rem",
-              lineHeight: 1.85,
-              color: "var(--muted)",
-              alignSelf: "end",
-            }}
-          >
-            Kurulum yok. Kredi kartı gerekmez. 14 gün boyunca tüm özellikleri
-            ücretsiz kullanın ve farkı ilk tekliften hissedin.
-          </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={titleInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.15 }}
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "var(--t-body)",
+                lineHeight: 1.85,
+                color: "var(--muted)",
+              }}
+            >
+              Kurulum yok. Kredi kartı gerekmez. 14 gün boyunca tüm özellikleri
+              ücretsiz kullanın.
+            </motion.p>
+          </div>
         </div>
 
         {/* Steps grid */}
         <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
             border: "1px solid var(--border)",
-            borderRadius: 20,
+            borderRadius: "var(--radius-xl)",
             overflow: "hidden",
             background: "var(--bg-card)",
           }}
         >
           {steps.map((step, i) => (
-            <StepCard key={i} step={step} index={i} />
+            <div
+              key={i}
+              style={{
+                borderRight:
+                  i < steps.length - 1 ? "1px solid var(--border)" : "none",
+              }}
+            >
+              <StepCard step={step} index={i} />
+            </div>
           ))}
         </div>
 
-        {/* CTA */}
+        {/* CTA — CSS btn-primary class */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          style={{ textAlign: "center", marginTop: "4rem" }}
+          style={{ textAlign: "center", marginTop: "var(--space-3xl)" }}
         >
-          <Link
-            href="/register"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "15px 36px",
-              borderRadius: 12,
-              background: "var(--ocean)",
-              color: "white",
-              fontFamily: "var(--font-body)",
-              fontSize: "0.9rem",
-              fontWeight: 600,
-              textDecoration: "none",
-              boxShadow: "0 4px 20px rgba(27,79,114,0.2)",
-              transition: "all 0.3s ease",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#154360";
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow =
-                "0 8px 30px rgba(27,79,114,0.35)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--ocean)";
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow =
-                "0 4px 20px rgba(27,79,114,0.2)";
-            }}
-          >
+          <Link href="/register" className="btn-primary">
             Hemen Dene — Ücretsiz
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path

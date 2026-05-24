@@ -1,3 +1,6 @@
+// src/lib/supabase/server.ts
+// Server-side Supabase client — use in Server Components, Route Handlers, Server Actions
+
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
@@ -17,7 +20,9 @@ export async function createClient() {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options),
             );
-          } catch {}
+          } catch {
+            // Server Component — cookies can't be set here, middleware handles it
+          }
         },
       },
     },

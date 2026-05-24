@@ -1,19 +1,13 @@
 "use client";
 
 /**
- * useBreakpoint
+ * useBreakpoint — Hydration-safe viewport hooks
  *
- * Hydration-safe breakpoint detection.
- * Returns `false` on SSR, correct value after mount.
- * Avoids window reference on server.
- *
- * Usage:
- *   const isMobile = useBreakpoint('sm')   // < 640px
- *   const isTablet = useBreakpoint('md')   // < 768px
- *   const isDesktop = useBreakpoint('lg')  // >= 1024px
+ * Uses useSyncExternalStore for proper SSR/CSR consistency.
+ * Server snapshot returns stable fallback to prevent hydration mismatch.
  */
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
 const BREAKPOINTS = {
   sm: 640,
@@ -25,70 +19,82 @@ const BREAKPOINTS = {
 
 type Breakpoint = keyof typeof BREAKPOINTS;
 
-/** Returns true when viewport width is BELOW the breakpoint (mobile-first) */
+/* ── Subscribe to media query changes ── */
+function createMediaSubscribe(query: string) {
+  return (callback: () => void) => {
+    const mq = window.matchMedia(query);
+    mq.addEventListener("change", callback);
+    return () => mq.removeEventListener("change", callback);
+  };
+}
+
+function createMediaSnapshot(query: string) {
+  return () => window.matchMedia(query).matches;
+}
+
+/**
+ * Returns true when viewport is BELOW the breakpoint (mobile-first).
+ * SSR default: false (assumes desktop — most common server rendering target).
+ * Prevents hydration mismatch by returning consistent server snapshot.
+ */
 export function useBreakpoint(bp: Breakpoint): boolean {
-  const [matches, setMatches] = useState(false); // false = SSR safe default
+  const query = `(max-width: ${BREAKPOINTS[bp] - 1}px)`;
 
-  useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${BREAKPOINTS[bp] - 1}px)`);
-    setMatches(mq.matches);
-
-    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, [bp]);
-
-  return matches;
+  return useSyncExternalStore(
+    createMediaSubscribe(query),
+    createMediaSnapshot(query),
+    () => false, // Server snapshot — always false (desktop fallback)
+  );
 }
 
-/** Returns true when viewport width is AT OR ABOVE the breakpoint */
+/**
+ * Returns true when viewport is AT OR ABOVE the breakpoint.
+ * SSR default: true (desktop).
+ */
 export function useMinBreakpoint(bp: Breakpoint): boolean {
-  const [matches, setMatches] = useState(true); // true = SSR safe for min
+  const query = `(min-width: ${BREAKPOINTS[bp]}px)`;
 
-  useEffect(() => {
-    const mq = window.matchMedia(`(min-width: ${BREAKPOINTS[bp]}px)`);
-    setMatches(mq.matches);
-
-    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, [bp]);
-
-  return matches;
+  return useSyncExternalStore(
+    createMediaSubscribe(query),
+    createMediaSnapshot(query),
+    () => true, // Server snapshot — desktop default
+  );
 }
 
-/** Returns current named breakpoint */
-export function useCurrentBreakpoint(): Breakpoint | "xs" {
-  const [current, setCurrent] = useState<Breakpoint | "xs">("lg"); // SSR default
-
-  useEffect(() => {
-    const update = () => {
-      const w = window.innerWidth;
-      if (w < 640) return setCurrent("xs");
-      if (w < 768) return setCurrent("sm");
-      if (w < 1024) return setCurrent("md");
-      if (w < 1280) return setCurrent("lg");
-      setCurrent("xl");
-    };
-    update();
-    window.addEventListener("resize", update, { passive: true });
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  return current;
-}
-
-/** Returns true if user prefers reduced motion */
+/**
+ * Returns true if user prefers reduced motion.
+ * SSR default: false (assume no preference).
+ */
 export function usePrefersReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
+  return useSyncExternalStore(
+    (callback) => {
+      const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+      mq.addEventListener("change", callback);
+      return () => mq.removeEventListener("change", callback);
+    },
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false,
+  );
+}
 
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
-
-  return reduced;
+/**
+ * Returns current named breakpoint label.
+ * SSR default: 'lg' (desktop).
+ */
+export function useCurrentBreakpoint(): Breakpoint | "xs" {
+  return useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("resize", callback, { passive: true });
+      return () => window.removeEventListener("resize", callback);
+    },
+    () => {
+      const w = window.innerWidth;
+      if (w < 640) return "xs" as const;
+      if (w < 768) return "sm" as const;
+      if (w < 1024) return "md" as const;
+      if (w < 1280) return "lg" as const;
+      return "xl" as const;
+    },
+    () => "lg" as const, // Server snapshot
+  );
 }
