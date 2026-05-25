@@ -1,40 +1,33 @@
 // src/lib/store/builder.ts
-// Zustand builder store with undo/redo via zundo
-
 import { create } from "zustand";
 import { temporal } from "zundo";
 import type { Proposal, ProposalBlock } from "@/types";
 
 interface BuilderState {
-  // Proposal data
   proposal: Proposal | null;
   selectedBlockId: string | null;
-
-  // UI state
   previewMode: boolean;
   isDirty: boolean;
   isSaving: boolean;
 
-  // Actions
   setProposal: (proposal: Proposal) => void;
   setSelectedBlock: (id: string | null) => void;
   setPreviewMode: (mode: boolean) => void;
   setSaving: (saving: boolean) => void;
 
-  // Block operations
   addBlock: (block: ProposalBlock) => void;
   removeBlock: (id: string) => void;
   updateBlock: (id: string, partial: Partial<ProposalBlock>) => void;
+  updateBlockData: (id: string, key: string, value: unknown) => void;
   reorderBlocks: (blocks: ProposalBlock[]) => void;
 
-  // Proposal metadata
   updateTitle: (title: string) => void;
   updateTheme: (theme: Partial<Proposal["theme"]>) => void;
 }
 
 export const useBuilderStore = create<BuilderState>()(
   temporal(
-    (set, get) => ({
+    (set) => ({
       proposal: null,
       selectedBlockId: null,
       previewMode: false,
@@ -48,44 +41,41 @@ export const useBuilderStore = create<BuilderState>()(
       setPreviewMode: (mode) => set({ previewMode: mode }),
 
       setSaving: (saving) =>
-        set({ isSaving: saving, isDirty: saving ? get().isDirty : false }),
+        set((s) => ({ isSaving: saving, isDirty: saving ? s.isDirty : false })),
 
       addBlock: (block) =>
-        set((state) => {
-          if (!state.proposal) return state;
+        set((s) => {
+          if (!s.proposal) return s;
           return {
-            proposal: {
-              ...state.proposal,
-              blocks: [...state.proposal.blocks, block],
-            },
+            proposal: { ...s.proposal, blocks: [...s.proposal.blocks, block] },
             isDirty: true,
             selectedBlockId: block.id,
           };
         }),
 
       removeBlock: (id) =>
-        set((state) => {
-          if (!state.proposal) return state;
+        set((s) => {
+          if (!s.proposal) return s;
           return {
             proposal: {
-              ...state.proposal,
-              blocks: state.proposal.blocks
+              ...s.proposal,
+              blocks: s.proposal.blocks
                 .filter((b) => b.id !== id)
                 .map((b, i) => ({ ...b, order: i })),
             },
             selectedBlockId:
-              state.selectedBlockId === id ? null : state.selectedBlockId,
+              s.selectedBlockId === id ? null : s.selectedBlockId,
             isDirty: true,
           };
         }),
 
       updateBlock: (id, partial) =>
-        set((state) => {
-          if (!state.proposal) return state;
+        set((s) => {
+          if (!s.proposal) return s;
           return {
             proposal: {
-              ...state.proposal,
-              blocks: state.proposal.blocks.map((b) =>
+              ...s.proposal,
+              blocks: s.proposal.blocks.map((b) =>
                 b.id === id ? { ...b, ...partial } : b,
               ),
             },
@@ -93,47 +83,48 @@ export const useBuilderStore = create<BuilderState>()(
           };
         }),
 
-      reorderBlocks: (blocks) =>
-        set((state) => {
-          if (!state.proposal) return state;
+      // Merges a single data key without replacing entire data object
+      updateBlockData: (id, key, value) =>
+        set((s) => {
+          if (!s.proposal) return s;
           return {
-            proposal: { ...state.proposal, blocks },
+            proposal: {
+              ...s.proposal,
+              blocks: s.proposal.blocks.map((b) =>
+                b.id === id ? { ...b, data: { ...b.data, [key]: value } } : b,
+              ),
+            },
             isDirty: true,
           };
+        }),
+
+      reorderBlocks: (blocks) =>
+        set((s) => {
+          if (!s.proposal) return s;
+          return { proposal: { ...s.proposal, blocks }, isDirty: true };
         }),
 
       updateTitle: (title) =>
-        set((state) => {
-          if (!state.proposal) return state;
-          return {
-            proposal: { ...state.proposal, title },
-            isDirty: true,
-          };
+        set((s) => {
+          if (!s.proposal) return s;
+          return { proposal: { ...s.proposal, title }, isDirty: true };
         }),
 
       updateTheme: (theme) =>
-        set((state) => {
-          if (!state.proposal) return state;
+        set((s) => {
+          if (!s.proposal) return s;
           return {
             proposal: {
-              ...state.proposal,
-              theme: { ...state.proposal.theme, ...theme },
+              ...s.proposal,
+              theme: { ...s.proposal.theme, ...theme },
             },
             isDirty: true,
           };
         }),
     }),
     {
-      // Only track proposal blocks + theme in undo history
-      // Don't track UI state (previewMode, isDirty, etc.)
-      partialize: (state) =>
-        Object.fromEntries(
-          Object.entries(state).filter(([key]) => ["proposal"].includes(key)),
-        ) as Partial<BuilderState>,
+      partialize: (s) => ({ proposal: s.proposal }) as Partial<BuilderState>,
       limit: 50,
     },
   ),
 );
-
-// Expose undo/redo for keyboard shortcuts
-export const useBuilderTemporal = () => useBuilderStore.temporal;
